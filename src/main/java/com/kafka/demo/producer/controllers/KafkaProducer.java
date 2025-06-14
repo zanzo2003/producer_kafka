@@ -1,7 +1,8 @@
 package com.kafka.demo.producer.controllers;
 
 
-import org.apache.kafka.clients.consumer.KafkaConsumer;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class KafkaProducer {
 
+    @Value("${kafka.topic}")
+    private String kafkaTopic;
     private KafkaTemplate<String, String> kafkaTemplate;
 
     public KafkaProducer(KafkaTemplate<String, String> kafkaTemplate){
@@ -18,7 +21,7 @@ public class KafkaProducer {
 
     @PostMapping("/send")
     public String sendMessage(@RequestParam String message){
-        kafkaTemplate.send("my-topic", message);
+        kafkaTemplate.send(kafkaTopic, message);
         return "message send : "+message;
     }
 
